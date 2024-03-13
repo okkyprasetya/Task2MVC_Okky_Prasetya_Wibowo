@@ -1,0 +1,76 @@
+﻿@model IEnumerable<MyWebFormApp.BLL.DTOs.UserDTO>
+
+<div class="row">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Assign roles Page</h1>
+    </div>
+
+    <div class="col-lg-12">
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Assign Role</h6>
+            </div>
+            <div class="card-body">
+                @Html.Raw(ViewData["message"])
+                <table class="table table-striped">
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Telephone</th>
+                        <th>Address</th>
+                        <th>Roles</th>
+                        <th>Action</th>
+                    </tr>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.Username</td>
+                            <td>@user.Email</td>
+                            <td>@user.Telp</td>
+                            <td>@user.Address</td>
+                            <td>
+                                @foreach (var role in user.Roles)
+                                {
+                                    <span>@role.RoleName</span>
+
+                                    <br />
+                                }
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#assignRoleModal_@user.Username">Assign Role</button>
+                                <div class="modal fade" id="assignRoleModal_@user.Username" tabindex="-1" role="dialog" aria-labelledby="assignRoleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="assignRoleModalLabel">Assign Role</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form asp-action="AssigningRoles" method="post">
+                                                    <input type="hidden" name="username" value="@user.Username" />
+                                                    <div class="form-group">
+                                                        <label for="roleID">Select Role:</label>
+                                                        <select name="roleID" id="roleID" class="form-control">
+                                                            @foreach (var role in ViewBag.Roles)
+                                                            {
+                                                                <option value="@role.RoleID">@role.RoleName</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Assign Role</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
